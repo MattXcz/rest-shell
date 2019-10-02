@@ -38,6 +38,7 @@ app = flask.Flask('rest-shell')
 
 
 @app.route('/execute', methods=['POST'])
+
 def execute():
     """ Execute supplied command and return response """
     apikey = flask.request.headers.get('X-Auth-Token')
@@ -59,6 +60,31 @@ def execute():
 
     response = {
         'status': status,
+        'output': output,
+    }
+
+    return flask.jsonify(response)
+
+@app.route('/sms', methods=['POST'])
+def sms():
+    """ Execute supplied command and return response """
+    apikey = flask.request.headers.get('X-Auth-Token')
+    if apikey != os.environ.get('REST_TOKEN'):
+        return "Check your auth TOKEN", 401
+
+    sms = flask.request.json.get('sms')
+    var1 = str(sms)
+
+    if not sms:
+        return 400
+
+    with tempfile.TemporaryFile() as stdout:
+        subprocess.Popen(['bash /smarthome/SH/SMS/SMS.sh %s' % (var1)], shell = True,stdout=stdout,stderr=subprocess.STDOUT)
+        stdout.seek(0)
+        output = stdout.read()
+
+    response = {
+        'status': 'SMS SEND',
         'output': output,
     }
 
