@@ -6,7 +6,7 @@ setup(
     version='0.1',
     author = 'Trey Tabner',
     author_email = 'trey@tabner.com',
-    url = 'https://github.com/treytabner/rest-shell',
+    url = 'https://github.com/MattXCZ/rest-shell',
     packages=['rest_shell'],
     entry_points={
         'console_scripts': [
